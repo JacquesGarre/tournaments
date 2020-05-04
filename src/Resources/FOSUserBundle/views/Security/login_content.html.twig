@@ -1,0 +1,37 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% if error %}
+    <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+{% endif %}
+
+<div>
+    <div class="card pt-4 pb-4">
+        <h2 class="text-center">Cette page est destinée aux administrateurs du tournoi.</h2>
+        <h3 class="text-center"><span style="color:red;">Si vous souhaitez vous inscrire</span> en tant que joueur, <a href="http://inscription.tournoitsp.ovh">cliquez-ici</a></h3>
+    </div>
+</div>
+
+
+<div>
+    <div class="card">
+        <form action="{{ path("fos_user_security_check") }}" method="post" class="m-auto">
+            <h1 class="h3 mt-5 mb-5 font-weight-normal text-center text-dark">Se connecter</h1>
+            {% if csrf_token %}
+                <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            {% endif %}
+
+            <label for="username" class="sr-only">{{ 'security.login.username'|trans }}</label>
+            <input type="text" class="form-control mb-3" id="username" name="_username" value="{{ last_username }}" required="required"  placeholder="Nom d'utilisateur"  autofocus/>
+
+            <label for="password" class="sr-only">{{ 'security.login.password'|trans }}</label>
+            <input type="password" class="form-control mb-3" id="password" name="_password" required="required" placeholder="Mot de passe"/>
+
+            <div class="checkbox mb-3">
+                <label for="remember_me">
+                    <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> Se souvenir de moi
+                </label>
+            </div>
+            <input type="submit" class="btn btn-lg btn-primary btn-block mb-5" id="_submit" name="_submit" value="Se connecter" />
+        </form>
+    </div>
+</div>

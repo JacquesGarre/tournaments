@@ -1,0 +1,14 @@
+<IfModule mod_rewrite.c>
+    Options -MultiViews
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteRule ^(.*)$ index.php [QSA,L]
+</IfModule>
+
+<IfModule !mod_rewrite.c>
+    <IfModule mod_alias.c>
+        RedirectMatch 302 ^/$ /index.php/
+    </IfModule>
+</IfModule>
+
+Redirect 301 /inscription/ https://tournoitsp.ovh/inscription-tournoi/a2d1602c5d2c8ccb63c7f8a25a6f0ad1

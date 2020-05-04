@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            {{ encore_entry_link_tags('app') }}
+        {% endblock %}
+        {% block javascripts %}
+            {{ encore_entry_script_tags('app') }}
+        {% endblock %}
+    </head>
+    <body>
+        {% if (error is defined and error != '') %}
+            <div class="alert alert-danger" role="alert">
+                {{error}}
+            </div> 
+        {% endif %}
+        {% if (notice is defined and notice != '') %}
+            <div class="alert alert-success">
+                {{notice}}
+            </div> 
+        {% endif %}
+        {% block body %}{% endblock %}
+    </body>
+</html>

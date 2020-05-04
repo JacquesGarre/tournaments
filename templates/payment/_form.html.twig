@@ -1,0 +1,22 @@
+
+
+
+    {{ form_row(form._token) }}
+
+    {% if 1==0 %}
+    {{ form_widget(form.value, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom du tableau'} }) }}
+    {{ form_errors(form.value) }}
+
+    {{ form_widget(form.date, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom du tableau'} }) }}
+    {{ form_errors(form.date) }}
+
+    {{ form_widget(form.board, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom du tableau'} }) }}
+    {{ form_errors(form.board) }}
+
+    {% endif %}
+
+    <label>Choisissez le joueur pour lequel vous souhaitez ajouter un paiement</label>
+    {{ form_widget(form.player, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom du tableau'} }) }}
+    {{ form_errors(form.player) }}
+
+    <button class="btn">{{ button_label|default('Save') }}</button>

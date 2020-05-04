@@ -1,0 +1,9 @@
+swiftmailer:
+    transport: smtp
+    auth_mode: login
+    port: 465
+    host: ssl0.ovh.net
+    command: /usr/bin/msmtp -t -C /home/web/.msmtprc
+    username: contact@tournoitsp.ovh
+    password: epinalTSPcyb3r4321
+    spool: { type: 'memory' }

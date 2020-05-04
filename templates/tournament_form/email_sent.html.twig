@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription validée{% endblock %}
+
+{% block body %}
+<div class="mt-5 container pt-3 bg-light card">
+    <div class="card-body">
+        <h1 class="h4 card-subtitle text-center">Merci de votre inscription!</h1>
+        <p class="mt-5 text-center">Pensez à confirmer votre adresse email en cliquant sur le lien envoyé à {{player.emailAdress}}</p>
+        <p class="mt-2 text-center">Vous pourrez également y trouver le récapitulatif de votre inscription.</p>
+        <h2 class="mt-5 h5 card-subtitle text-center">À bientôt!</h2>
+    </div>
+</div>
+{% endblock %}

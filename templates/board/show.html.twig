@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau {{ board.name }} {% endblock %}
+
+{% block body %}
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+    <div class="card-body">
+        <h1 class="h3 card-title mb-5">Tableau {{ board.name }} <a class="btn btn-danger btn-md float-right ml-2" href="{{ path('tournament_boards', {'id': tournament.id}) }}"><i class="fas fa-chevron-left mr-2"></i>Retour aux tableaux</a></h1>
+
+
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th>Nom</th>
+                    <td>{{ board.name }}</td>
+                </tr>
+                <tr>
+                    <th>Prix d'inscription</th>
+                    <td>{{ board.price }} €</td>
+                </tr>
+                <tr>
+                    <th>Points minimum requis</th>
+                    <td>{{ board.minPoints }}</td>
+                </tr>
+                <tr>
+                    <th>Points maximum requis</th>
+                    <td>{{ board.maxPoints }}</td>
+                </tr>
+                <tr>
+                    <th>Date de début</th>
+                    <td>{{ board.date ? board.date|date('d/m/Y à H:i') : '' }}</td>
+                </tr>
+                <tr>
+                    <th>Nombre d'inscrits</th>
+                    <td>{{ board.players.count }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <a class="btn btn-primary float-left" href="{{ path('board_edit', {'tournament_id': tournament.id, 'id': board.id}) }}"><i class="far fa-edit mr-2"></i>Éditer</a>
+
+        {{ include('board/_delete_form.html.twig') }}
+
+    </div>
+</div>
+{% endblock %}

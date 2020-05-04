@@ -1,0 +1,285 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Matchs{% endblock %}
+
+{% block body %}
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card" id="matches-page" ng-app="app" ng-controller="ContestsCtrl" ng-init="getContests()">
+    <h1 class="h3 ml-3 mt-2 mb-5">Matchs <a class="btn btn-success btn-md ml-2 mr-3" target="_blank" href="{{ path('tournament_matches_page', {'id': tournament.id}) }}">Ouvrir l'onglet public</a><a class="btn btn-danger btn-md float-right ml-2 mr-3" href="{{ path('tournament_show', {'id': tournament.id}) }}"><i class="fas fa-chevron-left mr-2"></i>Retour au tournoi</a></h1>
+    
+    <div class="row pl-5 pr-5 justify-content-between">
+
+        <div class="col-6">
+            <div class="bg-light card">
+                <div class="card-header font-weight-bold">
+                    En attente 
+                    <button type="button" class="btn btn-success btn-sm float-right ml-2" data-toggle="modal" data-target="#newMatchModal">
+                        Nouveau match
+                    </button>
+                    <!-- Modal Creation -->
+                    <div class="modal fade" id="newMatchModal" tabindex="-1" role="dialog" aria-labelledby="newMatchModalTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="newMatchModalTitle">Nouveau match</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="newMatchForm">
+                                        <label>Nom</label>
+                                        <input class="form-control mb-2" type="text" id="match_name" name="match_name" required autocomplete="off">
+                                        <label>Tableau</label>
+                                        <select class="form-control mb-2" name="match_board" id="match_board" required>
+                                            {% for board in tournament.boards %}
+                                                <option value="{{board.id}}">{{board.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <label>Joueurs</label>
+                                        <select name="match_players" id="playersSelect" class="form-control" multiple="multiple" style="display: none;">
+                                            {% for player in players %}
+                                                <option value="{{player.id}}" 
+                                                data-board="{% for key, board in player.boards %}{{board.id}}{% if key < player.boards.count - 1 %},{% endif %}{% endfor %}">{{player.bibNumber}} | {{player.firstName}} {{player.lastName}} | 
+                                                ({% for key, board in player.boards %}{{board.name}}{% if key < player.boards.count - 1 %},{% endif %}{% endfor %})
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </form>
+                                    <p id="error-player"></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                                    <button type="button" class="btn btn-success" id="submitNewMatch" ng-click="newContest()">Enregistrer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+
+                <!-- COLONNE EN ATTENTE-->
+                <div class="card-body p-0 column sortable" id="waiting-col">
+
+                    <!--tpl match angular-->
+                    <div ng-repeat="contest in contests | filter: {status: 0}" class="card m-1 match-[[contest.class]]" id="contest-[[contest.id]]">
+                        <div class="card-body row">
+                            <div class="col-4">
+                                <div class="card-title font-weight-bold">
+                                    <h5 class="h5">[[contest.name]]</h5>
+                                    <h6 class="h6 text-muted"></h6>
+                                </div>
+                                <span class="badge badge-pill badge-0 badge-tableau" data-toggle="modal" data-target="#board_[[contest.board.id]]">Tableau [[contest.board.name]]</span>
+                                <!-- Modal Tableau -->
+                                <div class="modal fade" id="board_[[contest.board.id]]" tabindex="-1" role="dialog" aria-labelledby="board_[[contest.board.id]]Title" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="board_[[contest.board.id]]Title">Tableau [[contest.board.name]]</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>Prix d'inscription : [[contest.board.price]] €</li>
+                                                    <li>Points minimum : [[contest.board.minPoints]]</li>
+                                                    <li>Points maximum : [[contest.board.maxPoints]]</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal Tableau -->
+                            </div>
+                            <div class="col-7">
+                                <span ng-repeat="player in contest.players">
+
+                                    <span class="badge badge-danger player-badge" ng-show="playerHasContestsRunning(player)" data-toggle="modal" data-target="#player_[[player.id]]">
+                                        [[player.firstName]] [[player.lastName]]
+                                    </span>
+                                    <span class="badge badge-success player-badge" ng-hide="playerHasContestsRunning(player)" data-toggle="modal" data-target="#player_[[player.id]]">
+                                        [[player.firstName]] [[player.lastName]]
+                                    </span>
+
+                                    <!-- Modal Joueur -->
+                                    <div class="modal fade" id="player_[[player.id]]" tabindex="-1" role="dialog" aria-labelledby="player_[[player.id]]Title" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="player_[[player.id]]Title">[[player.firstName]] [[player.lastName]]</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul>
+                                                        <li>[[player.points]] points</li>
+                                                        <li>Licence N°[[player.licence]]</li>
+                                                        <li>[[player.club]]</li>
+                                                        <li>N° de dossard : [[player.bibNumber]]</li>
+                                                        <li>Joue dans les tableaux : <span ng-repeat="board in player.boards">[[board.name]] </span></li>
+                                                    </ul>
+                                                    <div>
+                                                        <p ng-repeat="contest in player.contests" class="contest-phrase contest-[[contest.status]]">
+                                                            <span ng-if="contest.status != 0">Joue le match [[contest.name]] du tableau [[contest.board]] sur la table [[contest.tableName]]</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal Joueur -->
+                                </span>
+                            </div>
+                            <div class="col-1">
+                                <a href="javascript:void(0)" ng-click="deleteContest(contest.id)" class="delete-match text-right float-right">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <!-- Modal table name -->
+                        <div class="modal fade modal-table" id="contest-[[contest.id]]-modal" tabindex="-1" role="dialog" aria-labelledby="contest-[[contest.id]]-Title" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="contest-[[contest.id]]-Title">Affecter le match [[contest.name]] à une table</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <label>Nom de la table:</label>
+                                            <input type="text" name="table_name" class="form-control mb-3">
+                                            <input type="submit" class="btn btn-primary" value="Enregistrer">
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal table name -->
+                    </div>
+                    <!--//tpl match angular-->
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal table name -->
+        <div id="dialog-table" title="Affecter une table">
+            <form>
+                <label>Nom de la table:</label>
+                <input type="hidden" class="form-control mb-3" id="contest_id">
+                <input type="text" name="table_name" class="form-control mb-3" id="table_name">
+                <p id="error-table"></p>
+                <input type="submit" class="btn btn-primary" value="Enregistrer" id="save-table">
+            </form>
+        </div>
+        <!-- Modal table name -->
+
+
+        <!-- COLONNE EN COURS-->
+        <div class="col-6">
+            <div class="bg-light card">
+                <div class="card-header font-weight-bold">
+                    En cours
+                </div>
+                <div class="card-body p-0 column sortable" id="running-col">
+                    <!--tpl match angular-->
+                    <div class="card m-1 match-1 draggable running" ng-repeat="(key, contest) in contests | filter: {status: 1}" id="contest-[[contest.id]]">
+                        <div class="card-body row">
+                            <div class="col-4">
+                                <div class="card-title font-weight-bold">
+                                    <h5 class="h5">[[contest.name]]</h5>
+                                    <h6 class="h6 text-muted">Table [[contest.tableName]]</h6>
+                                </div>
+                                <span class="badge badge-pill badge-0 badge-tableau" data-toggle="modal" data-target="#board_[[contest.board.id]]">Tableau [[contest.board.name]]</span>
+                                <!-- Modal Tableau -->
+                                <div class="modal fade" id="board_[[contest.board.id]]" tabindex="-1" role="dialog" aria-labelledby="board_[[contest.board.id]]Title" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="board_[[contest.board.id]]Title">Tableau [[contest.board.name]]</h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <ul>
+                                                    <li>Prix d'inscription : [[contest.board.price]] €</li>
+                                                    <li>Points minimum : [[contest.board.minPoints]]</li>
+                                                    <li>Points maximum : [[contest.board.maxPoints]]</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Modal Tableau -->
+                            </div>
+                            <div class="col-7">
+                                <span ng-repeat="player in contest.players">
+
+                                    <span class="badge badge-primary player-badge" data-toggle="modal" data-target="#player_[[player.id]]_running">
+                                        [[player.firstName]] [[player.lastName]]
+                                    </span>
+
+                                    <!-- Modal Joueur -->
+                                    <div class="modal fade" id="player_[[player.id]]_running" tabindex="-1" role="dialog" aria-labelledby="player_[[player.id]]Title" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="player_[[player.id]]Title">[[player.firstName]] [[player.lastName]]</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul>
+                                                        <li>[[player.points]] points</li>
+                                                        <li>Licence N°[[player.licence]]</li>
+                                                        <li>[[player.club]]</li>
+                                                        <li>N° de dossard : [[player.bibNumber]]</li>
+                                                        <li>Joue dans les tableaux : <span ng-repeat="board in player.boards">[[board.name]] </span></li>
+                                                    </ul>
+                                                    <div>
+                                                        <p ng-repeat="contest in player.contests" class="contest-phrase contest-[[contest.status]]">
+                                                            <span ng-if="contest.status != 0">Joue le match [[contest.name]] du tableau [[contest.board]] sur la table [[contest.tableName]]</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Modal Joueur -->
+                                </span>
+                                
+                            </div>
+                            <div class="col-1">
+                                <a href="javascript:void(0)" ng-click="deleteContest(contest.id)" class="delete-match text-right float-right">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--//tpl match angular-->
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        var contestBaseUrl = '/tournaments/' + {{tournament.id}} + '/contests/';
+    </script>
+
+</div>
+
+
+{% endblock %}
+{% block javascripts %}
+    {{ encore_entry_script_tags('matches-page') }}
+{% endblock %}
+ 

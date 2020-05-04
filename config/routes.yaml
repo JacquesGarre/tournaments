@@ -1,0 +1,13 @@
+# fos_user overrrides
+fos_user_security_login:
+    path: /
+    controller: App\Controller\SecurityController::loginAction
+fos_user_security_logout:
+    path: /logout
+    defaults: { _controller: FOSUserBundle:Security:logout }
+fos_user_security_check:
+    path: /login_check
+    defaults: { _controller: FOSUserBundle:Security:check }
+fos_user_register:
+    resource: "@FOSUserBundle/Resources/config/routing/registration.xml"
+    prefix: /inscription

@@ -1,0 +1,22 @@
+
+
+{{ form_row(form._token) }}
+
+{{ form_widget(form.name, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom du tableau' } }) }}
+{{ form_errors(form.name) }}
+
+{{ form_widget(form.price, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Prix d\'inscription sans la réduction de 1€' } }) }}
+{{ form_errors(form.price) }}
+
+{{ form_widget(form.min_points, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Minimum de points requis' } }) }}
+{{ form_errors(form.min_points) }}
+
+{{ form_widget(form.max_points, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Maximum de points requis' } }) }}
+{{ form_errors(form.max_points) }}
+
+<label>Date à laquelle le tableau sera joué</label>
+{{ form_widget(form.date, { 'attr': {'class': 'form-control mb-3' } }) }}
+{{ form_errors(form.date) }}
+
+
+<button class="btn btn-primary float-left"><i class="fas fa-save mr-2"></i>Enregistrer</button>

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Board{% endblock %}
+
+{% block body %}
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+
+    <div class="card-body">
+        <h1 class="h3 mb-5 card-title">Édition du tableau {{ board.name }}</h1>
+
+        <form action="{{ path('board_edit', { 'tournament_id': tournament.id, 'id': board.id }) }}" method="POST"  class="m-auto">
+        {{ include('board/_form.html.twig', {'button_label': 'Update'}) }}
+        </form>
+
+        <a class="btn btn-danger float-right ml-2" href="{{ path('tournament_boards', {'id': tournament.id })  }}">Annuler</a>
+
+        {{ include('board/_delete_form.html.twig') }}
+
+    </div>
+</div>
+{% endblock %}

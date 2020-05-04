@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription au tournoi {{tournament.name}}{% endblock %}
+
+{% block body %}
+<div class="mt-5 container pt-3 bg-light card">
+    <div class="card-body">
+        <h1 class="h4 card-subtitle text-muted text-center">Inscription au tournoi</h1>
+        <h1 class="h3 card-title text-center mb-4">{{tournament.name}}</h1>
+        <hr>
+
+        {% if tournament.adminEmail %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="h5 card-title">Pour nous contacter</h3>
+                {{tournament.adminEmail}}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if tournament.description %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="h5 card-title">Description & règles du tournoi</h3>
+                {{tournament.description|raw}}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card mb-3">
+            <div class="card-body">
+                <h3 class="h5 card-title mb-4">Je renseigne mes coordonnées</h3>
+                {{ include('inscription/_form.html.twig') }}
+            </div>
+        </div>
+
+        
+    </div>
+</div>
+{% endblock %}

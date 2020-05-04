@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de votre inscription{% endblock %}
+
+{% block body %}
+<div class="mt-5 container pt-3 bg-light card">
+    <div class="card-body">
+        <h1 class="h4 card-subtitle text-center">Confirmation de votre inscription</h1>
+        <p class="mt-5 text-center">L'inscription de {{player.firstname}} {{player.lastname}} au tournoi {{tournament.name}} est confirmée.</p>
+    </div>
+</div>
+{% endblock %}

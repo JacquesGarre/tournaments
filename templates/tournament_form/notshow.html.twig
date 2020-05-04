@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription au tournoi {{tournament.name}}{% endblock %}
+
+{% block body %}
+<div class="mt-5 container pt-5 bg-light card">
+    <div class="card-body">
+        <h1 class="h3 card-title text-center">Les inscriptions au tournoi <span class="text-muted font-italic">{{tournament.name}}</span> sont actuellement fermées.</h1>
+        <hr>
+
+    </div>
+</div>
+{% endblock %}

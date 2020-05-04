@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau tableau{% endblock %}
+
+{% block body %}
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+
+    <div class="card-body">
+        <h1 class="h3 mb-5 card-title"><i class="fas fa-plus mr-2"></i>Nouveau tableau</h1>
+
+        <form action="{{ path('board_new', { 'tournament_id': tournament.id }) }}" method="POST"  class="m-auto">
+        {{ include('board/_form.html.twig') }}
+        </form>
+
+
+        <a href="{{ path('tournament_boards', {'id': tournament.id}) }}" class="btn btn-danger float-right">Annuler</a>
+    </div>
+
+</div>
+{% endblock %}
+

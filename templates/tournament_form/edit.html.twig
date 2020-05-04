@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Formulaire du tournoi{% endblock %}
+
+{% block body %}
+
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+    <div class="card-body">
+        <h1 class="h3 card-title mb-5">Formulaire du tournoi
+
+            <a class="btn btn-success ml-2" href="{{ path('tournament_form_show', {'uri': tournament_form.uri}) }}" target="_blank"><i class="far fa-eye mr-2"></i>Prévisualiser</a>
+            <a class="btn btn-danger btn-md float-right ml-2" href="{{ path('tournament_show', {'id': tournament.id}) }}">
+                <i class="fas fa-chevron-left mr-2"></i>Retour au tournoi
+            </a>
+        </h1>
+
+        <p>
+            <label>Url du formulaire</label>
+            <input class="form-control mb-5" type="text" value="{{url}}" disabled>
+        </p>
+        {{ include('tournament_form/_form.html.twig') }}
+
+    </div>
+</div>
+
+
+
+{% endblock %}

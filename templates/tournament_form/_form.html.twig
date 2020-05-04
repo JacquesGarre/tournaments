@@ -1,0 +1,22 @@
+
+
+<form action="{{path('tournament_form', {'id': tournament_form.id, 'tournament_id': tournament.id})}}" method="POST">
+    {{ form_row(form._token) }}
+
+    <label>Activer les inscriptions</label>
+    
+    <div class="onoffswitch mb-5">
+        {{ form_widget(form.status, { 'attr': {'class': 'onoffswitch-checkbox mb-3', 'id' : 'myonoffswitch' } }) }}
+        <label class="onoffswitch-label" for="tournament_form_status"></label>
+    </div>
+    {{ form_errors(form.status) }}
+
+
+
+    <label>Date de fermeture automatique des inscriptions</label>
+    {{ form_widget(form.expiration_date, { 'attr': {'class': 'form-control mb-5'} }) }}
+    {{ form_errors(form.expiration_date) }}
+
+    <button class="btn btn-primary float-left"><i class="fas fa-save mr-2"></i>Enregistrer</button>
+
+</form>

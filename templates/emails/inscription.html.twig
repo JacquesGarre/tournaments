@@ -1,0 +1,41 @@
+<html>
+<h1>Confirmation de votre inscription au tournoi {{tournament.name}}</h1>
+<hr>
+<h3>Vos données :</h3>
+{{player.firstname}} {{player.lastname}}<br>
+N° Licence FFTT : {{player.licence}}<br>
+{{player.points}} points<br>
+Club : {{player.club}}<br>
+<hr>
+<h3>Vos inscriptions :</h3>
+<table>
+    <thead>
+        <tr>
+            <th>Nom du tableau</th>
+            <th>Tarif (sur place)</th>
+            <th>Points minimum</th>
+            <th>Points maximum</th>
+            <th>Date de début</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for board in player.boards %}
+        <tr>
+            <td>{{board.name}}</td>
+            <td>{{board.price}} €</td>
+            <td>{{board.minPoints}}</td>
+            <td>{{board.maxPoints}}</td>
+            <td>{{ board.date ? board.date|date('d/m/Y à H:i') : '' }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h3>Pour valider votre adresse email, veuillez cliquer sur ce lien : </h3>
+<a href="{{validateLink}}">{{validateLink}}</a>
+<hr>
+<h3>Pour nous contacter : </h3>
+<p>{{tournament.adminEmail}}</p>
+<hr>
+<strong>À bientôt!</strong>
+</html>

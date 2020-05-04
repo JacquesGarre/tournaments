@@ -1,0 +1,35 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<div>
+    <div class="card">
+
+        <form action="{{ path('fos_user_registration_register') }}" method="POST"  class="m-auto">
+            <h1 class="h3 mt-5 mb-5 font-weight-normal text-center">S'inscrire</h1>
+            <div class="form-group" id="fos_user_registration_form">
+                {{ form_widget(form.email, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Adresse email' } }) }}
+                {{ form_errors(form.email) }}
+
+                {{ form_widget(form.username, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Nom d\'utilisateur' } }) }}
+                {{ form_errors(form.username) }}
+
+                {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Mot de passe' } }) }}
+                {{ form_errors(form.plainPassword.first) }}
+
+                {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Confirmation du mot de passe' } }) }}
+                {{ form_errors(form.plainPassword.second) }}
+
+                {{ form_widget(form.firstname, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Prénom' } }) }}
+                {{ form_errors(form.firstname) }}
+
+                {{ form_widget(form.lastname, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Nom' } }) }}
+                {{ form_errors(form.lastname) }}
+
+                {{ form_rest(form) }}
+
+            </div>
+            <div>
+                <input class="btn btn-lg btn-primary btn-block mb-5" type="submit" value="{{ 'S\'inscrire' }}">
+            </div>
+        </form>
+    </div>
+</div>

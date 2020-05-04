@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Erreur lors de l'inscription{% endblock %}
+
+{% block body %}
+<div class="mt-5 container pt-5 bg-light card">
+    <div class="card-body">
+        <h1 class="h3 card-title mb-5">Erreur lors de l'inscription</h1>       
+        {% if player %}
+        <p>Détails du licencié :</p>
+        <ul>    
+            <li>Licence n° {{player.licence}}</li>
+            <li>{{player.firstname}} {{player.lastname}}</li>
+            <li>{{player.points}} points</li>
+        </ul>
+
+        {% endif %}
+        <p>{{error}}</p>
+        <p>Si vous pensez qu'il s'agit d'une erreur, veuillez nous contacter via <strong>{{tournament.adminEmail}}</strong></p>
+        <p class="text-center mt-5">
+            <a class="btn btn-danger btn-md" href="">
+                <i class="fas fa-chevron-left mr-2"></i>Retour au formulaire d'inscription
+            </a> 
+        </p>
+    </div>
+</div>
+{% endblock %}

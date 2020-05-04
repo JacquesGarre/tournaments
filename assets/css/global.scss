@@ -1,0 +1,303 @@
+// assets/css/global.scss
+
+// customize some Bootstrap variables
+$primary: darken(#428bca, 20%);
+$body-bg: #343a40;
+$body-color: #343a40;
+
+// the ~ allows you to reference things in node_modules
+@import "~bootstrap/scss/bootstrap";
+
+.tournament-menu-item {
+    width:100%;
+    transition: transform .2s;
+    &:hover {
+        transform:scale(1.05);
+    }
+    .card {
+        min-height:200px;
+    }
+}
+
+
+.onoffswitch {
+    position: relative; width: 60px;
+    -webkit-user-select:none; -moz-user-select:none; -ms-user-select: none;
+}
+.onoffswitch-checkbox {
+    display: none;
+}
+.onoffswitch-label {
+    display: block; overflow: hidden; cursor: pointer;
+    height: 29px; padding: 0; line-height: 29px;
+    border: 2px solid #E3E3E3; border-radius: 29px;
+    background-color: #FFFFFF;
+    transition: background-color 0.3s ease-in;
+}
+.onoffswitch-label:before {
+    content: "";
+    display: block; width: 29px; margin: 0px;
+    background: #FFFFFF;
+    position: absolute; top: 0; bottom: 0;
+    right: 30px;
+    border: 2px solid #E3E3E3; border-radius: 29px;
+    transition: all 0.3s ease-in 0s;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label {
+    background-color: $success;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label, .onoffswitch-checkbox:checked + .onoffswitch-label:before {
+   border-color: $success;
+}
+.onoffswitch-checkbox:checked + .onoffswitch-label:before {
+    right: 0px;
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-top: 9px;
+}
+
+.circle-red {
+    background-color: $danger;
+}
+
+.circle-green {
+    background-color: $success;
+    border:1px solid $success;
+}
+
+.circle-orange {
+    background-color: $warning;
+}
+
+.circle-grey {
+    background-color: $danger;
+}
+
+.circle-blue {
+    background-color: $primary;
+    border:1px solid $success;
+}
+
+#data-players {
+    display:none;
+}
+
+.adress-valid-0 {
+    color:$danger;
+}
+
+.adress-valid-1 {
+    color:$success;
+}
+
+.match-0 {
+    border-left: 5px solid $success;
+}
+
+.match-2 {
+    border-left: 5px solid $danger;
+}
+
+.match-1 {
+    border-left: 5px solid $primary;
+}
+
+#matches-page {
+    .card-header {
+        height: 55px;
+    }
+
+    .column {
+        height: 65vh;
+        overflow-x: hidden;
+        overflow-y: auto;
+    }
+    .row {
+        margin-right: 0 !important;
+        margin-left: 0 !important;
+    }
+}
+
+.badge-0 {
+    background-color: $primary;
+    color: #fff;
+}
+
+.badge-1 {
+    background-color: $secondary;
+    color: #fff;
+}
+
+.badge-2 {
+    background-color: $warning;
+    color: #fff;
+}
+
+.badge-3 {
+    background-color: $info;
+    color: #fff;
+}
+
+.badge-4 {
+    background-color: $dark;
+    color: #fff;
+}
+
+.badge-5 {
+    background-color: #563d7c;
+    color: #fff;
+}
+
+.badge-6 {
+    background-color: #9c3c04;
+    color: #fff;
+}
+
+.badge-7 {
+    background-color: #58b401;
+    color: #fff;
+}
+
+.badge-8 {
+    background-color: #0401b4;
+    color: #fff;
+}
+
+.badge-9 {
+    background-color: #9601b4;
+    color: #fff;
+}
+
+.badge-10 {
+    background-color: #fd5151;
+    color: #fff;
+}
+
+.badge-11 {
+    background-color: #2d4b19;
+    color: #fff;
+}
+
+.badge-12 {
+    background-color: #631818;
+    color: #fff;
+}
+
+.player-badge {
+    cursor: pointer;
+    &:hover {
+        opacity:0.7;
+    }
+}
+
+#matches-page {
+    -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none; /* Safari */
+       -khtml-user-select: none; /* Konqueror HTML */
+         -moz-user-select: none; /* Firefox */
+          -ms-user-select: none; /* Internet Explorer/Edge */
+              user-select: none; /* Non-prefixed version, currently
+                                    supported by Chrome and Opera */
+  }
+
+//contest-phrase contest-[[contest.status]]
+
+.contest-1 {
+    color:$danger;
+}
+
+.delete-match {
+    color:$danger;
+}
+
+.badge-tableau {
+    cursor: pointer;
+    &:hover {
+        opacity:0.7;
+    }
+}
+
+.draggable {
+    cursor: pointer;
+}
+
+.ui-state-highlight {
+    background-color: transparent;
+    border:none;
+    outline:none;
+    color: black;
+}
+
+.modal-table {
+    z-index:9999;
+
+}
+
+input#players_id, input#players_id_spid{
+    display:none;
+}
+
+#players-card .export-form {
+    display:inline-block;
+}
+
+.badge {
+    font-size: 80% !important;
+}
+
+#error-table, #error-player {
+    font-weight: normal;
+    color:$danger;
+}
+
+.match-public {
+    display: inline-block;
+    text-align: center;
+    height:180px;
+    margin: 5px;
+    padding: 0px;
+
+    h4 {
+        font-size: 20px;
+        margin-bottom: 2px;
+        margin-top: 5px;
+    }
+    h6 {
+        font-style: italic;
+    }
+
+    hr {
+        margin:0;
+        margin-bottom: 2px;
+    }
+
+    p {
+        margin-bottom: 0;
+        width: 100%;
+        font-size: 14px;
+    }
+}
+
+.matches-public {
+    margin:0;
+    top: 0px;
+    position: relative;
+    transition: top 8s linear;
+
+    h1 {
+        width: 100%;
+        margin-top: 45vh;
+        color:#fff;
+        text-align: center;
+    }
+}
+
+#count-players {
+    font-size: 18px;
+    font-style: italic;
+}

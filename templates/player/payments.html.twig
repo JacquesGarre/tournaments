@@ -1,0 +1,147 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Paiements de {{player.firstname}} {{player.lastname}}{% endblock %}
+
+{% block body %}
+
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+
+    <div class="card-body">
+        <h1 class="h3 card-title mb-5">Paiements de {{player.firstname}} {{player.lastname}} <a class="btn btn-danger btn-md float-right ml-2" href="{{ path('player_index', {'tournament_id': tournament.id}) }}"><i class="fas fa-chevron-left mr-2"></i>Retour à la liste des joueurs</a> </h1>
+        {% for key, payment in payments %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    {% if payment and payment.transaction and payment.transaction.status == 1 %}
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h5>Tableau {{payment.board.name}}</h5>
+                                    </th>
+                                    <th class="text-center">Montant réglé</th>
+                                    <th class="text-center">Montant dû</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{player.firstname}} {{player.lastname}} a effectué le règlement de {{payment.value}}€ {% if payment.transaction %}<strong>(en ligne, ID Transaction: {{ payment.transaction.id }})</strong>{% endif %} pour ce tableau, le {{payment.date|date('d/m/Y à h:i')}}.</td>
+                                    <td class="text-center">{{payment.value|number_format(2, ',', '')}}€</td>
+                                    <td></td>
+                                    <td class="text-right">
+                                        <a href="{{ path('player_payment_delete', {'tournament_id': tournament.id, 'payment_id': payment.id, 'id' : player.id}) }}" class="btn btn-sm btn-danger">Rembourser</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% elseif payment and not payment.transaction %}
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <h5>Tableau {{payment.board.name}}</h5>
+                                    </th>
+                                    <th class="text-center">Montant réglé</th>
+                                    <th class="text-center">Montant dû</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{player.firstname}} {{player.lastname}} a effectué le règlement de {{payment.value}}€ {% if payment.transaction %}<strong>(en ligne, ID Transaction: {{ payment.transaction.id }})</strong>{% endif %} pour ce tableau, le {{payment.date|date('d/m/Y à h:i')}}.</td>
+                                    <td class="text-center">{{payment.value|number_format(2, ',', '')}}€</td>
+                                    <td></td>
+                                    <td class="text-right">
+                                        <a href="{{ path('player_payment_delete', {'tournament_id': tournament.id, 'payment_id': payment.id, 'id' : player.id}) }}" class="btn btn-sm btn-danger">Rembourser</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    {% else %}
+                        
+                        <table class="table table-borderless">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        {% for board in boards if board.id == key %}
+                                            <h5>Tableau {{board.name}}</h5>
+                                        {% endfor %}
+                                    </th>
+                                    <th class="text-center">Montant réglé</th>
+                                    <th class="text-center">Montant dû</th>
+                                    <th class="text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{player.firstname}} {{player.lastname}} n'a pas encore effectué le règlement de son inscription sur ce tableau.</td>
+                                    <td></td>
+                                    <td class="text-center">
+                                        {% for board in boards if board.id == key %}
+                                            {{ board.price|number_format(2, ',', '') }}€
+                                        {% endfor %}
+                                    </td>
+                                    <td class="text-right">
+                                        {% for board in boards if board.id == key %}
+                                            <a href="{{ path('player_board_payment', {'tournament_id': tournament.id, 'id' : player.id, 'board_id': board.id}) }}" class="btn btn-sm btn-success">Régler</a>
+                                            <!--<a class="btn btn-sm btn-danger" href="{{ path('player_delete_board', {'tournament_id': tournament.id, 'board_id': board.id, 'id': player.id}) }}">Annuler l'inscription</a>-->
+                                        {% endfor %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+
+
+        {% set payedSum = 0 %}        
+        {% set reduction = 0 %}        
+        {% for payment in payments %} 
+            {% if payment %}
+                {% if payment.transaction and payment.transaction.status == 1 %}
+                    {% set payedSum = payedSum + payment.value %} 
+                    {% set reduction = reduction + 1 %}     
+                {% elseif not payment.transaction %}       
+                    {% set payedSum = payedSum + payment.value %} 
+                {% endif %}
+            {% endif %}       
+        {% endfor %} 
+        {% set dueSum = 0 %}             
+        {% for board in boards %}            
+            {% set dueSum = dueSum + board.price %}        
+        {% endfor %}    
+
+        <table class="table mt-5">
+            <tr>
+                <td><h6>Montant total à payer</h6></td>
+                <td class="text-right">{{ dueSum|number_format(2, ',', '') }}€</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><h6>Déjà payé par le joueur</h6></td>
+                <td class="text-right">- {{ payedSum|number_format(2, ',', '') }}€</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><h6>Réduction via paiement en ligne</h6></td>
+                <td class="text-right">- {{ reduction|number_format(2, ',', '') }}€</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="text-right h3"><strong class="mr-3">Reste à régler:</strong> {{ (dueSum - payedSum - reduction)|number_format(2, ',', '') }}€</td>
+                <td class="text-right">
+                    {% if (dueSum - payedSum  - reduction) %}
+                        <a class="btn btn-md btn-success" href="{{ path('player_payment_done', {'tournament_id': tournament.id, 'id': player.id}) }}">Effectuer le réglement complet et le check-in en 1 clic</a>
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+</div>
+{% endblock %}

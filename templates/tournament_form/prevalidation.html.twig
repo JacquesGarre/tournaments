@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Confirmation de votre inscription{% endblock %}
+
+{% block body %}
+<div class="mt-5 container pt-3 bg-light card">
+    <div class="card-body">
+        <h1 class="h4 card-subtitle text-center">Validation de votre inscription au tournoi {{tournament.name}}</h1>
+        <p class="mt-5 text-center">Vous confirmez être <strong>{{player.firstname}} {{player.lastname}}</strong>, et vouloir vous inscrire aux tableaux suivants: </p>
+        {% if payment == 'arrival' %}
+            <ul>
+                {% for board in paid_boards %}
+                    <li>Tableau {{ board.name }}, inscription à {{ board.price }}€ <span style="font-style: italic;">(déjà inscrit et déjà réglé)</span></li>
+                {% endfor %}
+                {% for board in to_pay %}
+                    <li>Tableau {{ board.name }}, inscription à {{ board.price }}€</li>
+                {% endfor %}
+                {% set total = 0 %}
+                {% for board in to_pay %}
+                    {% set total = total + board.price %}
+                {% endfor %}
+                <hr>
+                <strong>Total à régler: {{total}}€</strong>
+            </ul>
+
+            <form method="POST" action="/validation/">
+                <input type="hidden" name="to_pay_boards" value="{{ ids }}" />
+                <input type="hidden" name="player_id" value="{{ player.id }}" />
+                <input type="submit" name="valider" value="Oui, je valide mon inscription" class="btn btn-success text-center" style="margin: 0 auto; display: block;"/>
+            </form>
+
+
+        {% else %}
+            <ul>
+                {% for board in paid_boards %}
+                    <li>Tableau {{ board.name }}, inscription à {{ board.price - 1 }}€ <span style="font-style: italic;">(inscription déjà réalisée)</span></li>
+                {% endfor %}
+                {% for board in to_pay %}
+                    <li>Tableau {{ board.name }}, inscription à {{ board.price - 1 }}€</li>
+                {% endfor %}
+                {% set total = 0 %}
+                {% for board in to_pay %}
+                    {% set total = total + board.price - 1 %}
+                {% endfor %}
+                <hr>
+                <strong>Total à payer : {{total}}€</strong>
+            </ul>
+
+            {% set trans_date = 'now'|date('YmdHis', 'UTC') %}
+            {% set params = 'INTERACTIVE+' ~ total|number_format(2, '', '') ~ '+0+PRODUCTION+978+PAYMENT+SINGLE+75871790+' ~ trans_date ~ '+' ~ strpad(trans_id) ~ '+0+V2+df4DADzh7AidX6ps' %}     
+
+            {% if total > 0 %}
+
+            <form method="POST" action="https://paiement.systempay.fr/vads-payment/">
+                <input type="hidden" name="vads_action_mode" value="INTERACTIVE" />
+                <input type="hidden" name="vads_amount" value="{{total|number_format(2, '', '')}}" />
+                <input type="hidden" name="vads_capture_delay" value="0" />
+                <input type="hidden" name="vads_ctx_mode" value="PRODUCTION" />
+                <input type="hidden" name="vads_currency" value="978" />
+                <input type="hidden" name="vads_page_action" value="PAYMENT" />
+                <input type="hidden" name="vads_payment_config" value="SINGLE" />
+                <input type="hidden" name="vads_site_id" value="75871790" />
+                <input type="hidden" name="vads_trans_date" value="{{ trans_date }}" />
+                <input type="hidden" name="vads_trans_id" value="{{ strpad(trans_id) }}" />
+                <input type="hidden" name="vads_validation_mode" value="0" />
+                <input type="hidden" name="vads_version" value="V2" />
+                <input type="hidden" name="signature" value="{{getSignature(params)}}"/>
+                <input type="submit" name="payer" value="Oui, je valide mon inscription et je souhaite régler en ligne" class="btn btn-success text-center" style="margin: 0 auto; display: block;"/>
+            </form>
+
+            {% endif %}
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
