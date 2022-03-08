@@ -9,6 +9,8 @@ composer install
 
 npm install
 
+npm install --global yarn
+
 yarn add node-sass --dev
 
 php bin/console doctrine:schema:update --force --dump-sql
