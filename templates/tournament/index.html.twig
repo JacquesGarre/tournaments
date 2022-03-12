@@ -4,33 +4,44 @@
 
 {% block body %}
 
-
+<!-- 
 <a href="{{ path('fos_user_security_logout') }}">
     {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
-</a>
+</a> -->
 
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="bg-light card mt-3">
+                <div class="card-header">
+                    <h1 class="h3 card-title mt-1 mx-1">
+                        <i class="fas fa-table-tennis mr-2"></i>Mes tournois 
+                        <a class="btn btn-primary btn-md float-end" href="{{ path('tournament_new') }}">
+                            <i class="fas fa-plus mr-2"></i>Créer un tournoi
+                        </a>
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <tbody>
+                        {% for tournament in tournaments %}
+                            <tr>
+                                <td class="align-middle">{{ tournament.name }}</td>
+                                <td class="text-right">
+                                    <a href="{{ path('tournament_show', {'id': tournament.id}) }}" class="btn btn-success"><i class="fas fa-tools mr-2"></i>Administrer</a>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4" class="text-center">Aucun tournoi trouvé.</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
 
-<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
-
-    <div class="card-body">
-        <h1 class="h3 card-title mb-5"><i class="fas fa-table-tennis mr-2"></i>Mes tournois <a class="btn btn-primary btn-md float-right" href="{{ path('tournament_new') }}"><i class="fas fa-plus mr-2"></i>Créer un tournoi</a></h1>
-        <table class="table table-hover">
-            <tbody>
-            {% for tournament in tournaments %}
-                <tr>
-                    <td class="align-middle">{{ tournament.name }}</td>
-                    <td class="text-right">
-                        <a href="{{ path('tournament_show', {'id': tournament.id}) }}" class="btn btn-success"><i class="fas fa-tools mr-2"></i>Administrer</a>
-                    </td>
-                </tr>
-            {% else %}
-                <tr>
-                    <td colspan="4" class="text-center">Aucun tournoi trouvé.</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+            </div>
+        </div>
     </div>
-
 </div>
 {% endblock %}

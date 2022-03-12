@@ -3,18 +3,23 @@
 {% block title %}New Tournament{% endblock %}
 
 {% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
 
-<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+                <div class="card-body">
+                    <h1 class="h3 mb-5 card-title">Nouveau tournoi</h1>
 
-    <div class="card-body">
-        <h1 class="h3 mb-5 card-title">Nouveau tournoi</h1>
+                    <form action="{{path('tournament_new')}}" method="POST">
+                    {{ include('tournament/_form.html.twig') }}
+                    </form>
 
-        <form action="{{path('tournament_new')}}" method="POST">
-        {{ include('tournament/_form.html.twig') }}
-        </form>
+                    <a href="{{ path('tournament_index') }}" class="btn btn-danger float-end">Annuler</a>
+                </div>
 
-        <a href="{{ path('tournament_index') }}" class="btn btn-danger float-right">Annuler</a>
+            </div>
+        </div>
     </div>
-
 </div>
 {% endblock %}
