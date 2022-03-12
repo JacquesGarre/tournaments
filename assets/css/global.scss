@@ -2,8 +2,8 @@
 
 // customize some Bootstrap variables
 $primary: darken(#428bca, 20%);
-$body-bg: #343a40;
-$body-color: #343a40;
+$body-bg: rgb(226, 226, 226);
+$body-color: rgb(49, 49, 49);
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";

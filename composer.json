@@ -7,14 +7,18 @@
         "ext-iconv": "*",
         "cboden/ratchet": "^0.4.1",
         "components/jqueryui": "^1.12",
+        "doctrine/annotations": "^1.0",
+        "doctrine/doctrine-bundle": "^1.11",
+        "doctrine/doctrine-migrations-bundle": "^3.0",
+        "doctrine/orm": "^2.7",
         "friendsofsymfony/user-bundle": "~2.0",
+        "phpdocumentor/reflection-docblock": "^5.3",
         "phpoffice/phpspreadsheet": "^1.6",
         "sensio/framework-extra-bundle": "4.0.0",
-        "symfony/asset": "4.2.*",
-        "symfony/config": "4.2.*",
-        "symfony/console": "4.2.*",
-        "symfony/debug-pack": "*",
-        "symfony/dotenv": "4.2.*",
+        "symfony/asset": "4.2.12",
+        "symfony/config": "4.2.12",
+        "symfony/console": "4.2.12",
+        "symfony/dotenv": "4.2.12",
         "symfony/expression-language": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/form": "4.2.*",
@@ -22,15 +26,13 @@
         "symfony/intl": "4.2.*",
         "symfony/maker-bundle": "^1.0",
         "symfony/monolog-bundle": "^3.1",
-        "symfony/orm-pack": "^1.0",
         "symfony/process": "4.2.*",
-        "symfony/profiler-pack": "*",
+        "symfony/property-access": "4.2.*",
+        "symfony/property-info": "4.2.*",
         "symfony/requirements-checker": "^1.1",
         "symfony/security-bundle": "4.2.*",
         "symfony/serializer": "4.2.*",
-        "symfony/serializer-pack": "*",
         "symfony/swiftmailer-bundle": "^3.2",
-        "symfony/test-pack": "*",
         "symfony/translation": "4.2.*",
         "symfony/twig-bundle": "4.2.*",
         "symfony/validator": "4.2.*",
@@ -40,10 +42,14 @@
         "twig/extensions": "^1.5"
     },
     "require-dev": {
-        "symfony/debug-pack": "*",
+        "phpunit/phpunit": "^9.5",
+        "symfony/browser-kit": "4.2.*",
+        "symfony/css-selector": "4.2.*",
+        "symfony/debug-bundle": "4.2.*",
         "symfony/maker-bundle": "^1.0",
-        "symfony/profiler-pack": "*",
-        "symfony/test-pack": "*",
+        "symfony/phpunit-bridge": "^6.0",
+        "symfony/stopwatch": "4.2.*",
+        "symfony/web-profiler-bundle": "4.2.*",
         "symfony/web-server-bundle": "4.2.*",
         "symfony/webpack-encore-bundle": "^1.1"
     },
@@ -51,7 +57,11 @@
         "preferred-install": {
             "*": "dist"
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "symfony/flex": true
+        },
+        "platform-check": false
     },
     "autoload": {
         "psr-4": {
