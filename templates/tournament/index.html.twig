@@ -27,8 +27,8 @@
                         {% for tournament in tournaments %}
                             <tr>
                                 <td class="align-middle">{{ tournament.name }}</td>
-                                <td class="text-right">
-                                    <a href="{{ path('tournament_show', {'id': tournament.id}) }}" class="btn btn-success"><i class="fas fa-tools mr-2"></i>Administrer</a>
+                                <td class="text-end">
+                                    <a href="{{ path('tournament_show', {'id': tournament.id}) }}" class="btn btn-primary"><i class="fas fa-tools mr-2"></i>Administrer</a>
                                 </td>
                             </tr>
                         {% else %}

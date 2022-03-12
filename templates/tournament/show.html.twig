@@ -3,115 +3,111 @@
 {% block title %}{{ tournament.name }}{% endblock %}
 
 {% block body %}
-
-<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
-    <h1 class="h3 ml-3 mt-2 mb-5"><i class="fas fa-tools mr-3"></i>{{ tournament.name }}  <a class="btn btn-danger btn-md float-right mr-3" href="{{ path('tournament_index') }}"><i class="fas fa-chevron-left mr-2"></i>Voir mes tournois</a></h1>
-
-    <div class="row pl-5 pr-5">
-
-        <!--START ## Édition du tournoi-->
-        <div class="col-3">
-            <a href="{{ path('tournament_edit', {'id': tournament.id}) }}" class="btn tournament-menu-item">
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Éditer</h4>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="text-center"><i class="far fa-edit"></i></h2>
-                        <ul class="list-unstyled mt-2 mb-2">
-                            <li class="font-italic">Permet d'éditer le nom du tournoi</li>
-                            <li class="font-italic">Permet d'éditer la description du tournoi</li>
-                        </ul>
-                    </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mt-3 bg-light card">
+                <div class="card-header">
+                    <h1 class="h3 ml-3 mt-2">
+                        <i class="fas fa-tools mr-3"></i>{{ tournament.name }}  
+                        <a href="{{ path('tournament_edit', {'id': tournament.id}) }}" class="btn btn-primary btn-md ml-3">
+                            Éditer
+                        </a>
+                        <form class="d-inline-block" id="delete-form" method="post" action="{{ path('tournament_delete', {'id': tournament.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ tournament.id) }}">
+                            <button class="btn btn-danger btn-md ml-3">
+                                Supprimer
+                            </button>
+                        </form>
+                        <a class="btn btn-primary btn-md float-end mr-3" href="{{ path('tournament_index') }}">
+                            <i class="fas fa-chevron-left mr-2"></i>Voir mes tournois
+                        </a>
+                    </h1>
                 </div>
-            </a>
-        </div>
-        <!--END ## Édition du tournoi-->
+                <div class="card-body row pl-5 pr-5">
 
-        <!--START ## Suppression du tournoi-->
-        <div class="col-3">
-            {{ include('tournament/_delete_form.html.twig') }}
-        </div>
-        <!--END ## Suppression du tournoi-->
+                    <!--START ## Tableaux-->
+                    <div class="col-3">
+                        <a href="{{ path('tournament_boards', {'id': tournament.id}) }}" class="btn tournament-menu-item">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h4 class="my-0 font-weight-normal">Tableaux</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center"><i class="fas fa-chalkboard-teacher"></i></h2>
+                                    <ul class="list-unstyled mt-2 mb-2">
+                                        <li class="font-italic">Permet de gérer les tableaux du tournoi</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!--END ## Tableaux-->
 
-        <!--START ## Tableaux-->
-        <div class="col-3">
-            <a href="{{ path('tournament_boards', {'id': tournament.id}) }}" class="btn tournament-menu-item">
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Tableaux</h4>
+                    <!--START ## Inscription-->
+                    <div class="col-3">
+                        <a href="{{ path('tournament_form', {'tournament_id': tournament.id}) }}" class="btn tournament-menu-item">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h4 class="my-0 font-weight-normal">Inscription</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center"><i class="fas fa-clipboard-list"></i></h2>
+                                    <ul class="list-unstyled mt-2 mb-2">
+                                        <li class="font-italic">Permet d'ouvrir les inscriptions</li>
+                                        <li class="font-italic">Permet de récupérer l'URL d'inscription</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                    <div class="card-body">
-                        <h2 class="text-center"><i class="fas fa-chalkboard-teacher"></i></h2>
-                        <ul class="list-unstyled mt-2 mb-2">
-                            <li class="font-italic">Permet de gérer les tableaux du tournoi</li>
-                        </ul>
+                    <!--END ## Inscription-->
+
+                    <!--START ## Joueurs-->
+                    <div class="col-3">
+                        <a href="{{ path('player_index', {'tournament_id': tournament.id}) }}" class="btn tournament-menu-item">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h4 class="my-0 font-weight-normal">Joueurs</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center"><i class="fas fa-users"></i></h2>
+                                    <ul class="list-unstyled mt-2 mb-2">
+                                        <li class="font-italic">Permet de gérer les joueurs</li>
+                                        <li class="font-italic">Affiche les statuts et les infos</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </a>
                     </div>
+                    <!--END ## Joueurs-->
+
+                    <!--START ## Matchs-->
+                    <div class="col-3">
+                        <a href="{{ path('contests_index', {'tournament_id': tournament.id}) }}" class="btn tournament-menu-item">
+                            <div class="card shadow-sm">
+                                <div class="card-header">
+                                    <h4 class="my-0 font-weight-normal">Matchs</h4>
+                                </div>
+                                <div class="card-body">
+                                    <h2 class="text-center"><i class="fas fa-table-tennis"></i></h2>
+                                    <ul class="list-unstyled mt-2 mb-2">
+                                        <li class="font-italic">Permet de gérer les matchs</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <!--END ## Matchs-->
+
                 </div>
-            </a>
-        </div>
-        <!--END ## Tableaux-->
 
-        <!--START ## Inscription-->
-        <div class="col-3">
-            <a href="{{ path('tournament_form', {'tournament_id': tournament.id}) }}" class="btn tournament-menu-item">
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Inscription</h4>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="text-center"><i class="fas fa-clipboard-list"></i></h2>
-                        <ul class="list-unstyled mt-2 mb-2">
-                            <li class="font-italic">Permet d'ouvrir les inscriptions</li>
-                            <li class="font-italic">Permet de récupérer l'URL d'inscription</li>
-                        </ul>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--END ## Inscription-->
 
-        <!--START ## Joueurs-->
-        <div class="col-3 mt-4">
-            <a href="{{ path('player_index', {'tournament_id': tournament.id}) }}" class="btn tournament-menu-item">
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Joueurs</h4>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="text-center"><i class="fas fa-users"></i></h2>
-                        <ul class="list-unstyled mt-2 mb-2">
-                            <li class="font-italic">Permet de gérer les joueurs</li>
-                            <li class="font-italic">Affiche les statuts et les infos</li>
-                        </ul>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--END ## Joueurs-->
 
-        <!--START ## Matchs-->
-        <div class="col-3 mt-4">
-            <a href="{{ path('contests_index', {'tournament_id': tournament.id}) }}" class="btn tournament-menu-item">
-                <div class="card shadow-sm">
-                    <div class="card-header">
-                        <h4 class="my-0 font-weight-normal">Matchs</h4>
-                    </div>
-                    <div class="card-body">
-                        <h2 class="text-center"><i class="fas fa-table-tennis"></i></h2>
-                        <ul class="list-unstyled mt-2 mb-2">
-                            <li class="font-italic">Permet de gérer les matchs</li>
-                        </ul>
-                    </div>
-                </div>
-            </a>
-        </div>
-        <!--END ## Matchs-->
 
+            </div>
+        </div>
     </div>
-
-
-
-
 </div>
 {% endblock %}

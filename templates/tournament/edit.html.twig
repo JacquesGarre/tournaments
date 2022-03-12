@@ -3,18 +3,24 @@
 {% block title %}Edit Tournament{% endblock %}
 
 {% block body %}
-<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="mt-3 mr-5 ml-5 pt-2 pb-5 bg-light card">
 
-    <div class="card-body">
-        <h1 class="h3 mb-5 card-title">Édition du tournoi {{ tournament.name }}</h1>
+                <div class="card-body">
+                    <h1 class="h3 mb-5 card-title">Édition du tournoi {{ tournament.name }}</h1>
 
-        <form action="{{path('tournament_edit', {'id': tournament.id})}}" method="POST">
-        {{ include('tournament/_form.html.twig') }}
-        </form>
+                    <form action="{{path('tournament_edit', {'id': tournament.id})}}" method="POST">
+                    {{ include('tournament/_form.html.twig') }}
+                    </form>
 
-        <a class="btn btn-danger float-right" href="{{ path('tournament_show', {'id': tournament.id}) }}">Annuler</a>
+                    <a class="btn btn-danger float-right" href="{{ path('tournament_show', {'id': tournament.id}) }}">Annuler</a>
 
 
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock %}
