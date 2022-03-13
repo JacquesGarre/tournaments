@@ -11,4 +11,7 @@
     </IfModule>
 </IfModule>
 
-Redirect 301 /inscription/ https://tournoitsp.ovh/inscription-tournoi/a2d1602c5d2c8ccb63c7f8a25a6f0ad1
+AuthName "Développement"
+AuthType Basic
+AuthUserFile ".htpasswd"
+Require valid-user

@@ -8,10 +8,10 @@
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
             {% endif %}
 
-            <label for="username" class="sr-only">Nom d'utilisateur</label>
+            <label for="username" class="sr-only mb-1">Nom d'utilisateur</label>
             <input type="text" class="form-control mb-3" id="username" name="_username" value="{{ last_username }}" required="required"  placeholder="Nom d'utilisateur"  autofocus/>
 
-            <label for="password" class="sr-only">Mot de passe</label>
+            <label for="password" class="sr-only mb-1">Mot de passe</label>
             <input type="password" class="form-control mb-3" id="password" name="_password" required="required" placeholder="Mot de passe"/>
 
             <div class="checkbox mb-3">
