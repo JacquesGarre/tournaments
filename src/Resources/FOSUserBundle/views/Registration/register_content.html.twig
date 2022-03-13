@@ -6,29 +6,36 @@
         <form action="{{ path('fos_user_registration_register') }}" method="POST"  class="m-auto">
             <h1 class="h3 mt-5 mb-5 font-weight-normal text-center">S'inscrire</h1>
             <div class="form-group" id="fos_user_registration_form">
-                {{ form_widget(form.email, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Adresse email' } }) }}
-                {{ form_errors(form.email) }}
 
-                {{ form_widget(form.username, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Nom d\'utilisateur' } }) }}
-                {{ form_errors(form.username) }}
+                <hr class="my-4">
 
-                {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Mot de passe' } }) }}
-                {{ form_errors(form.plainPassword.first) }}
-
-                {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Confirmation du mot de passe' } }) }}
-                {{ form_errors(form.plainPassword.second) }}
-
-                {{ form_widget(form.firstname, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Prénom' } }) }}
+                {{ form_widget(form.firstname, { 'attr': {'class': 'form-control mb-3' , 'placeholder': 'Prénom' } }) }}
                 {{ form_errors(form.firstname) }}
 
-                {{ form_widget(form.lastname, { 'attr': {'class': 'form-control mb-2', 'placeholder': 'Nom' } }) }}
+                {{ form_widget(form.lastname, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom' } }) }}
                 {{ form_errors(form.lastname) }}
+
+                {{ form_widget(form.email, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse email' } }) }}
+                {{ form_errors(form.email) }}
+
+                <hr class="my-4">
+
+                {{ form_widget(form.username, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom d\'utilisateur' } }) }}
+                {{ form_errors(form.username) }}
+
+                {{ form_widget(form.plainPassword.first, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Mot de passe' } }) }}
+                {{ form_errors(form.plainPassword.first) }}
+
+                {{ form_widget(form.plainPassword.second, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Confirmation du mot de passe' } }) }}
+                {{ form_errors(form.plainPassword.second) }}
+
+                <hr class="my-4">
 
                 {{ form_rest(form) }}
 
             </div>
             <div>
-                <input class="btn btn-lg btn-primary btn-block mb-5" type="submit" value="{{ 'S\'inscrire' }}">
+                <input class="btn btn-md btn-primary btn-block mb-5 mt-3 float-end" type="submit" value="{{ 'S\'inscrire' }}">
             </div>
         </form>
     </div>
