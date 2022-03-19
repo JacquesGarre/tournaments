@@ -17,8 +17,13 @@ Encore
      * Each entry will result in one JavaScript file (e.g. app.js)
      * and one CSS file (e.g. app.css) if you JavaScript imports CSS.
      */
+    .addEntry('jquery', '/node_modules/jquery/dist/jquery.min.js')
+    .addEntry('bootstrap', '/node_modules/bootstrap/dist/js/bootstrap.min.js')
+    .addEntry('jquery-ui', '/node_modules/jquery-ui-dist/jquery-ui.min.js')
     .addEntry('app', './assets/js/app.js')
     .addEntry('matches-page', './assets/js/matches-page.js')
+    .addEntry('players', './assets/js/players.js')
+    .addStyleEntry('jquery-ui-styles', '/node_modules/jquery-ui-dist/jquery-ui.min.css')
     .addStyleEntry('global', './assets/css/global.scss')
     .addStyleEntry('home', './assets/css/home.scss')
     //.addEntry('page1', './assets/js/page1.js')

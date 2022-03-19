@@ -19,7 +19,7 @@
                     <input type="checkbox" id="remember_me" name="_remember_me" value="on" /> Se souvenir de moi
                 </label>
             </div>
-            <input type="submit" class="btn btn-md btn-primary btn-block mb-5 float-end" id="_submit" name="_submit" value="Se connecter" />
+            <input type="submit" class="btn btn-md btn-primary btn-block mb-5 float-right" id="_submit" name="_submit" value="Se connecter" />
             {% if error %}
                 <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
             {% endif %}

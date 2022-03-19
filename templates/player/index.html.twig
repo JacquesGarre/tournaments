@@ -12,155 +12,124 @@
         cursor: pointer;
     }
 </style>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-<script>
-    $(function () {
-        function scroll_to_top(div) {
-            $(div).click(function() {
-                $('html,body').animate({scrollTop: 0}, 'slow');
-            });
-            $(window).scroll(function(){
-                if($(window).scrollTop()<500){
-                    $(div).fadeOut();
-                } else{
-                    $(div).fadeIn();
-                }
-            });
-        }
-        scroll_to_top("#back-to-top");
-    });
-</script>
-<div class="container-fluid mt-3 ">
-    <div class="row">
-        <div class="col-md-12">
-            <div class="mr-5 ml-5 pt-2 pb-5 bg-light card" id="players-card">
-                <div class="card-body">
-                    <h1 class="h3 card-title mb-5">
-                        Joueurs <span id="count-players">({{players.count}} résultats sur {{players.count}})</span>
-                        <a class="btn btn-danger btn-md float-end ml-2" href="{{ path('tournament_show', {'id': tournament.id}) }}">
-                            <i class="fas fa-chevron-left mr-2"></i>Retour au tournoi
-                        </a>
-                    </h1>
 
-                    <form method="POST" action="{{ path('player_export', {'tournament_id': tournament.id}) }}" class="export-form">
-                        <input type="text" name="players_id" value="{% for key, player in players %}{{player.id}}{% if key < players.count-1 %},{% endif %}{% endfor %}" id="players_id">
-                        <input type="submit" value="Export" class="ml-3 btn btn-success">
-                    </form>
-                    <form method="POST" action="{{ path('player_export_fede', {'tournament_id': tournament.id}) }}" class="export-form">
-                        <input type="text" name="players_id_spid" value="{% for key, player in players %}{{player.id}}{% if key < players.count-1 %},{% endif %}{% endfor %}" id="players_id_spid">
-                        <input type="submit" value="Export SPIDD" class="ml-3 btn btn-success">
-                    </form>
-                    <div class="form-inline row mt-3" id="search">
-                        <label class="mr-3">Rechercher par</label>
-                        <div class="col">
-                            <input class="form-control mr-2" type="number" id="bib_number" placeholder="N° de dossard">
-                        </div>
-                        <div class="col">
-                            <input class="form-control mr-2" type="text" id="lastname" placeholder="Nom">
-                        </div>
-                        <div class="col">
-                            <input class="form-control mr-2" type="number" id="licence" placeholder="N° de licence">
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="collapse" id="collapseExample">
-                        <div class="row mb-5">
-                            <div class="col">
-                                <p>
-                                    <label for="points">Points entre</label>
-                                    <input type="text" id="points" name="points" class="filter" readonly style="background-color:transparent; border: none; color:#343a40;">
-                                </p>
-                                <div id="slider-range"></div>
-                            </div>
-                            <div class="col">
-                                <label>Genre</label>
-                                <select class="filter form-control" name="genre">
-                                    <option value="" selected>Tous</option>
-                                    <option value="M">Homme</option>
-                                    <option value="F">Femme</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label>Tableaux</label>
-                                <select class="filter form-control" name="board">
-                                    <option value="0" selected>Tous</option>
-                                    {% for board in tournament.boards %}
-                                        <option value="{{board.id}}">{{board.name}}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label>Est présent</label>
-                                <select class="filter form-control" name="checkin_status">
-                                    <option value="0" selected>Tous</option>
-                                    <option value="1">Non</option>
-                                    <option value="2">Oui</option>
-                                </select>
-                            </div>
-                            <div class="col">
-                                <label>A payé</label>
-                                <select class="filter form-control" name="status">
-                                    <option value="0" selected>Tous</option>
-                                    <option value="1">Non</option>
-                                    <option value="2">Sur place</option>
-                                    <option value="5">En ligne</option>
-                                    <option value="3">Partiellement</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+<div class="mt-5 mr-5 ml-5 pt-2 pb-5 bg-light card" id="players-card">
+    <div class="card-body">
+        <h1 class="h3 card-title mb-5">Joueurs <span id="count-players">({{players.count}} résultats sur {{players.count}})</span><a class="btn btn-danger btn-md float-right ml-2" href="{{ path('tournament_show', {'id': tournament.id}) }}"><i class="fas fa-chevron-left mr-2"></i>Retour au tournoi</a></h1>
 
-                    <table class="table table-hover" style="font-size: 15px;">
-                        <thead>
-                            <tr>
-                                <th>Dossard</th>
-                                <th>Prénom</th>
-                                <th>Nom</th>
-                                <th>Licence</th>
-                                <th>Email</th>
-                                <th>Points</th>
-                                <th>Genre</th>
-                                <th>Club</th>
-                                <th>Tableaux</th>
-                                <th class="text-center">Présent</th>
-                                <th class="text-center">A payé</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody id="playersList">
-                        {% for player in players %}
-                            <tr {{playerDataAttributes(player)}}>
-                                <td>{{player.bibNumber}}</td>
-                                <td>{{player.firstname}}</td>
-                                <td>{{player.lastname}}</td>
-                                <td>{{player.licence}}</td>
-                                <td class="adress-valid-{{player.valid}}">{{player.emailAdress}}</td>
-                                <td>{{player.points}}</td>
-                                <td>{{player.genre}}</td>
-                                <td>{{player.club}}</td>
-                                <td>
-                                    {% for key, board in player.boards %}
-                                        {{ board.name }}{% if key != player.boards.count - 1 %},{% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td>{{circle(player.checkinStatus)|raw}}</td>
-                                <td class="status-circle">{{paymentcircle(player.status)|raw}}</td>
-                                <td class="text-right">
-                                    {% if player.checkinStatus == 1 %}
-                                        <a class="btn btn-sm btn-danger" href="{{ path('player_checkout', {'id': player.id, 'tournament_id': tournament.id}) }}">Check-out</a>
-                                    {% else %}
-                                        <a class="btn btn-sm btn-success" href="{{ path('player_checkin', {'id': player.id, 'tournament_id': tournament.id}) }}">Check-in</a>
-                                    {% endif %}
-                                    <a class="btn btn-sm btn-info" href="{{ path('player_boards', {'id': player.id, 'tournament_id': tournament.id}) }}">Tableaux</a>
-                                    <a class="btn btn-sm btn-primary" href="{{ path('player_payment_manage', {'id': player.id, 'tournament_id': tournament.id}) }}">Paiements</a>
-                                </td>
-                            </tr>
+        <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+            Filtres
+        </a>
+        <form method="POST" action="{{ path('player_export', {'tournament_id': tournament.id}) }}" class="export-form">
+            <input type="text" name="players_id" value="{% for key, player in players %}{{player.id}}{% if key < players.count-1 %},{% endif %}{% endfor %}" id="players_id">
+            <input type="submit" value="Export" class="ml-3 btn btn-success">
+        </form>
+        <form method="POST" action="{{ path('player_export_fede', {'tournament_id': tournament.id}) }}" class="export-form">
+            <input type="text" name="players_id_spid" value="{% for key, player in players %}{{player.id}}{% if key < players.count-1 %},{% endif %}{% endfor %}" id="players_id_spid">
+            <input type="submit" value="Export SPIDD" class="ml-3 btn btn-success">
+        </form>
+        <div class="float-right mx-sm-3 form-inline" id="search">
+            <label class="mr-3">Rechercher par</label>
+            <input class="form-control mr-2" type="number" id="bib_number" placeholder="N° de dossard">
+            <input class="form-control mr-2" type="text" id="lastname" placeholder="Nom">
+            <input class="form-control mr-2" type="number" id="licence" placeholder="N° de licence">
+        </div>
+        <hr>
+        <div class="collapse" id="collapseExample">
+            <div class="row mb-5">
+                <div class="col">
+                    <p>
+                        <label for="points">Points entre</label>
+                        <input type="text" id="points" name="points" class="filter" readonly style="background-color:transparent; border: none; color:#343a40;">
+                    </p>
+                    <div id="slider-range"></div>
+                </div>
+                <div class="col">
+                    <label>Genre</label>
+                    <select class="filter form-control" name="genre">
+                        <option value="" selected>Tous</option>
+                        <option value="M">Homme</option>
+                        <option value="F">Femme</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Tableaux</label>
+                    <select class="filter form-control" name="board">
+                        <option value="0" selected>Tous</option>
+                        {% for board in tournament.boards %}
+                            <option value="{{board.id}}">{{board.name}}</option>
                         {% endfor %}
-                        </tbody>
-                    </table>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Est présent</label>
+                    <select class="filter form-control" name="checkin_status">
+                        <option value="0" selected>Tous</option>
+                        <option value="1">Non</option>
+                        <option value="2">Oui</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>A payé</label>
+                    <select class="filter form-control" name="status">
+                        <option value="0" selected>Tous</option>
+                        <option value="1">Non</option>
+                        <option value="2">Sur place</option>
+                        <option value="5">En ligne</option>
+                        <option value="3">Partiellement</option>
+                    </select>
                 </div>
             </div>
         </div>
+
+        <table class="table table-hover" style="font-size: 15px;">
+            <thead>
+                <tr>
+                    <th>Dossard</th>
+                    <th>Prénom</th>
+                    <th>Nom</th>
+                    <th>Licence</th>
+                    <th>Email</th>
+                    <th>Points</th>
+                    <th>Genre</th>
+                    <th>Club</th>
+                    <th>Tableaux</th>
+                    <th class="text-center">Présent</th>
+                    <th class="text-center">A payé</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="playersList">
+            {% for player in players %}
+                <tr {{playerDataAttributes(player)}}>
+                    <td>{{player.bibNumber}}</td>
+                    <td>{{player.firstname}}</td>
+                    <td>{{player.lastname}}</td>
+                    <td>{{player.licence}}</td>
+                    <td class="adress-valid-{{player.valid}}">{{player.emailAdress}}</td>
+                    <td>{{player.points}}</td>
+                    <td>{{player.genre}}</td>
+                    <td>{{player.club}}</td>
+                    <td>
+                        {% for key, board in player.boards %}
+                            {{ board.name }}{% if key != player.boards.count - 1 %},{% endif %}
+                        {% endfor %}
+                    </td>
+                    <td>{{circle(player.checkinStatus)|raw}}</td>
+                    <td class="status-circle">{{paymentcircle(player.status)|raw}}</td>
+                    <td class="text-right">
+                        {% if player.checkinStatus == 1 %}
+                            <a class="btn btn-sm btn-danger" href="{{ path('player_checkout', {'id': player.id, 'tournament_id': tournament.id}) }}">Check-out</a>
+                        {% else %}
+                            <a class="btn btn-sm btn-success" href="{{ path('player_checkin', {'id': player.id, 'tournament_id': tournament.id}) }}">Check-in</a>
+                        {% endif %}
+                        <a class="btn btn-sm btn-info" href="{{ path('player_boards', {'id': player.id, 'tournament_id': tournament.id}) }}">Tableaux</a>
+                        <a class="btn btn-sm btn-primary" href="{{ path('player_payment_manage', {'id': player.id, 'tournament_id': tournament.id}) }}">Paiements</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 {% endblock %}

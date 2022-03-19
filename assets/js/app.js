@@ -10,6 +10,18 @@ import '../css/app.css';
 import '../css/global.scss';
 
 // Need jQuery? Install it with "yarn add jquery", then uncomment to import it.
-// import $ from 'jquery';
+import $ from 'jquery';
 
-console.log('Hello Webpack Encore! Edit me in assets/js/app.js');
+function scroll_to_top(div) {
+    $(div).on('click', function() {
+        $('html,body').animate({scrollTop: 0}, 'slow');
+    });
+    $(window).on('scroll', function(){
+        if($(window).scrollTop()<500){
+            $(div).fadeOut();
+        } else{
+            $(div).fadeIn();
+        }
+    });
+}
+scroll_to_top("#back-to-top");

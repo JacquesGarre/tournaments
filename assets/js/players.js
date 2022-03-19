@@ -2,8 +2,7 @@ $(document).ready(function() {
 
 
     //MODAL BOOTSTRAP SUR FORM INSCRIPTION
-
-    $('#validation-data').click(function(){
+    $('#validation-data').on('click', function(){
 
         if($('#player_email_adress').val() !== ''){
             $('#validationModal .modal-body').html('Numéro de licence FFTT non trouvé, veuillez rééssayer.');
@@ -14,7 +13,10 @@ $(document).ready(function() {
                 var data = {};
                 $('#confirmation-button').hide();
                 $.get( "/fftt-api/?licence=" + licence, function( data ) {
-                    data = jQuery.parseJSON(data);
+
+                    console.log(data);
+
+                    data = JSON.parse(data);
                     if(data.LISTE !== 'undefined'){
                         var html = 'Confirmez-vous vouloir inscrire <strong>' + data.LISTE.LICENCE.PRENOM + ' ' + data.LISTE.LICENCE.NOM + '</strong>, licencié(e) du club de "' + data.LISTE.LICENCE.NOMCLUB + '" au tournoi?';
                         $('#confirmation-button').show();
@@ -38,11 +40,9 @@ $(document).ready(function() {
         
     });
 
-    $('#confirmation-button').click(function(){
-        $('#inscription-form-final').submit();
+    $('#confirmation-button').on('click', function(){
+        $('#inscription-form-final').trigger('submit');
     })
-
-
 
     //slider points
     $("#slider-range").slider({
@@ -54,7 +54,11 @@ $(document).ready(function() {
       slide: function( event, ui ) {
         $( "#points" ).val(ui.values[ 0 ] + " et " + ui.values[ 1 ] );
       }
-    }).bind('slidechange',function(event,ui){filterPlayers();});
+    })
+    .bind('slidechange', function(event,ui){
+        filterPlayers();
+    });
+
     $( "#points" ).val($( "#slider-range" ).slider( "values", 0 ) + " et " + $( "#slider-range" ).slider( "values", 1 ));
 
 
