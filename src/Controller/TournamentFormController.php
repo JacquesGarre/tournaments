@@ -118,7 +118,7 @@ class TournamentFormController extends AbstractController
 
             //if player isn't registered, get infos from API and create it
             if (!$playerExists) {
-                $apiUrl = 'http://www.fftt.com/mobile/pxml/xml_licence.php?serie=ADJFJFSQ0545FDS&tm=20190208102245000&tmc=7ce7a41367fbd813e36cf3e218007b95b39bbf75&id=SW459&licence=' . $licence;
+                $apiUrl = 'https://apiv2.fftt.com/mobile/pxml/xml_licence.php?serie=ADJFJFSQ0545FDS&tm=20190208102245000&tmc=7ce7a41367fbd813e36cf3e218007b95b39bbf75&id=SW459&licence=' . $licence;
                 $curl = curl_init();
                 curl_setopt_array($curl, array(
                     CURLOPT_RETURNTRANSFER => 1,
@@ -129,7 +129,7 @@ class TournamentFormController extends AbstractController
                 $playerInfos = XMLHelper::XMLtoArray($resp);
                 //redirect API error
 				if (empty($playerInfos)) {
-                    $apiUrl = 'http://www.fftt.com/mobile/pxml/xml_licence.php?serie=ADJFJFSQ0545FDS&tm=20190208102245000&tmc=7ce7a41367fbd813e36cf3e218007b95b39bbf75&id=SW459&licence=0' . $licence;
+                    $apiUrl = 'https://apiv2.fftt.com/mobile/pxml/xml_licence.php?serie=ADJFJFSQ0545FDS&tm=20190208102245000&tmc=7ce7a41367fbd813e36cf3e218007b95b39bbf75&id=SW459&licence=0' . $licence;
 					$curl = curl_init();
 					curl_setopt_array($curl, array(
 						CURLOPT_RETURNTRANSFER => 1,
