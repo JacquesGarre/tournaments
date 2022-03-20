@@ -350,9 +350,6 @@ class TournamentFormController extends AbstractController
                 'validateLink' => $validateLink
             ]
         );
-        // $headers = 'From:' . $sender . "\r\n";
-        // $headers .= "MIME-Version: 1.0" . "\r\n";
-        // $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
         try {
 
             $message = (new \Swift_Message($subject))
