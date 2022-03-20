@@ -324,7 +324,7 @@ class TournamentFormController extends AbstractController
     /**
      * @Route("/validation/", name="tournament_form_validation_inscription", methods={"GET", "POST"})
      */
-    public function validation(Request $request, BoardRepository $boardRepository, PlayerRepository $playerRepository): Response
+    public function validation(Request $request, BoardRepository $boardRepository, PlayerRepository $playerRepository, \Swift_Mailer $mailer): Response
     {   
         $boardIds = explode(',', filter_input(INPUT_POST, 'to_pay_boards', FILTER_SANITIZE_STRING));
         $boards = $boardRepository->findBy(['id'=>$boardIds]);
@@ -337,13 +337,12 @@ class TournamentFormController extends AbstractController
         $em->persist($player);
         $em->flush();
         //Envoi de mail de confirmation
-        $sender = 'contact@tournoitsp.ovh';
+        $sender = 'no-reply@smaaash.fr';
         $recipient = $player->getEmailAdress();
         $tournament = $boards[0]->getTournament();
-
-        $subject = "Votre inscription au tournoi TSP";
-        $validateLink = 'http://' . $_SERVER['HTTP_HOST'] . '/confirmation-inscription/' . $player->getValidationUrl() . '/' . $tournament->getId() . '/' . $player->getId();
-        $message = $this->renderView(
+        $subject = "Votre inscription au tournoi ".$tournament->getName();
+        $validateLink = 'https://' . $_SERVER['HTTP_HOST'] . '/confirmation-inscription/' . $player->getValidationUrl() . '/' . $tournament->getId() . '/' . $player->getId();
+        $body = $this->renderView(
             'emails/inscription.html.twig',
             [
                 'player' => $player,
@@ -351,10 +350,25 @@ class TournamentFormController extends AbstractController
                 'validateLink' => $validateLink
             ]
         );
-        $headers = 'From:' . $sender . "\r\n";
-        $headers .= "MIME-Version: 1.0" . "\r\n";
-        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
-        mail($recipient, $subject, $message, $headers);
+        // $headers = 'From:' . $sender . "\r\n";
+        // $headers .= "MIME-Version: 1.0" . "\r\n";
+        // $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        try {
+
+            $message = (new \Swift_Message($subject))
+            ->setFrom([$sender => "Smaaash.fr"])
+            ->setTo($recipient)
+            ->setBody(
+                $body,
+                'text/html'
+            );
+            $mailer->send($message);
+
+        } catch(Exception $e){
+            echo $e->getMessage();
+            die();
+        }
+        
         return $this->render('tournament_form/email_sent.html.twig', [
             'player' => $player,
         ]);
