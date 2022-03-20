@@ -75,7 +75,9 @@
                         <option value="0" selected>Tous</option>
                         <option value="1">Non</option>
                         <option value="2">Sur place</option>
-                        <option value="5">En ligne</option>
+                        {% if tournament.onlinePaymentActivated == 1 %}
+                            <option value="5">En ligne</option>
+                        {% endif %}
                         <option value="3">Partiellement</option>
                     </select>
                 </div>

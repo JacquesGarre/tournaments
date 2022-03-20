@@ -58,6 +58,11 @@ class Tournament
      */
     private $contests;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $onlinePaymentActivated;
+
     public function __construct()
     {
         $this->admins = new ArrayCollection();
@@ -243,6 +248,17 @@ class Tournament
             }
         }
 
+        return $this;
+    }
+
+    public function getOnlinePaymentActivated(): ?bool
+    {
+        return $this->onlinePaymentActivated;
+    }
+
+    public function setOnlinePaymentActivated(bool $onlinePaymentActivated): self
+    {
+        $this->onlinePaymentActivated = $onlinePaymentActivated;
         return $this;
     }
 

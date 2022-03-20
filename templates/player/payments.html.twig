@@ -125,11 +125,13 @@
                 <td class="text-right">- {{ payedSum|number_format(2, ',', '') }}€</td>
                 <td></td>
             </tr>
-            <tr>
-                <td><h6>Réduction via paiement en ligne</h6></td>
-                <td class="text-right">- {{ reduction|number_format(2, ',', '') }}€</td>
-                <td></td>
-            </tr>
+            {% if tournament.onlinePaymentActivated %}
+                <tr>
+                    <td><h6>Réduction via paiement en ligne</h6></td>
+                    <td class="text-right">- {{ reduction|number_format(2, ',', '') }}€</td>
+                    <td></td>
+                </tr>
+            {% endif %}
             <tr>
                 <td></td>
                 <td class="text-right h3"><strong class="mr-3">Reste à régler:</strong> {{ (dueSum - payedSum - reduction)|number_format(2, ',', '') }}€</td>

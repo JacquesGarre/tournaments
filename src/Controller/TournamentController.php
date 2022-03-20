@@ -48,6 +48,9 @@ class TournamentController extends AbstractController
             $tournamentForm->setExpirationDate(new \DateTime());
             $tournamentForm->setUri(hash('md5', uniqid()));
             $tournament->setTournamentForm($tournamentForm);
+            if(empty($tournament->getOnlinePaymentActivated())){
+                $tournament->setOnlinePaymentActivated(false);
+            }
             $entityManager->persist($tournamentForm);
             $entityManager->persist($tournament);
             $entityManager->flush();
