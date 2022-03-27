@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Stripe\Stripe;
+
 use App\Entity\TournamentForm;
 use App\Form\TournamentFormType;
 use App\Repository\TournamentFormRepository;
@@ -9,6 +11,7 @@ use App\Repository\BoardRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Tournament;
 use App\Repository\TournamentRepository;
@@ -20,6 +23,9 @@ use App\Repository\PaymentRepository;
 use App\Repository\TransactionRepository;
 use App\Entity\Payment;
 use App\Entity\Transaction;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+
+
 
 /**
  * @Route("/")
@@ -55,6 +61,29 @@ class TournamentFormController extends AbstractController
         ]);
     }
 
+    /**
+     * @Route("/success/{uri}/{tournament_id}/{player_id}", name="payment_succeeded", methods={"GET"})
+     */
+    public function onlinePaymentSuccess(
+        Request $request,
+        string $uri,
+        int $tournament_id,
+        int $player_id,
+        PlayerRepository $playerRepository,
+        TournamentRepository $tournamentRepository
+    ){
+        // Create payment done for each board of player (- $_ENV['ONLINE_REDUCTION'] for each)
+
+        // Update status of player to 4
+
+        // Envoi d'un email de recap
+
+        
+
+
+
+    }
+
 
     /**
      * @Route("/confirmation-inscription/{uri}/{tournament_id}/{player_id}", name="inscription_confirm", methods={"GET"})
@@ -76,7 +105,8 @@ class TournamentFormController extends AbstractController
 
         return $this->render('tournament_form/confirmation_inscription.html.twig', [
             'player' => $player,
-            'tournament' => $tournament
+            'tournament' => $tournament,
+            'uri' => $tournament->getTournamentForm()->getUri()
         ]);
     }
 
@@ -210,8 +240,7 @@ class TournamentFormController extends AbstractController
                                 )
                             );
 
-                              //si paiement et si paiement transaction status = 1 ou si paiement et paiement transaction == null
-
+                            //si paiement et si paiement transaction status = 1 ou si paiement et paiement transaction == null
                             if( ( !empty($payment) && !empty($payment->getTransaction()) && ($payment->getTransaction()->getStatus()==1) ) || ( !empty($payment) && empty($payment->getTransaction())) ) { //si l'utilisateur a déjà payé son inscription a ce tableau
                                 $paidBoards[] = $board->getId();
                             } else { 
@@ -288,7 +317,8 @@ class TournamentFormController extends AbstractController
                     'trans_id' => $transaction->getId(),
                     'paid_boards' => $paidE,
                     'to_pay' => $toPayE,
-                    'ids' => $ids
+                    'ids' => $ids,
+                    'reduction' => !empty($_ENV['ONLINE_REDUCTION']) ? $_ENV['ONLINE_REDUCTION'] : 0
                 ]);
             }
         }
@@ -301,6 +331,7 @@ class TournamentFormController extends AbstractController
                     'form' => $playerForm->createView(),
                     'tournament_form' => $tournamentForm,
                     'tournament' => $tournament,
+                    'reduction' => !empty($_ENV['ONLINE_REDUCTION']) ? $_ENV['ONLINE_REDUCTION'] : 0
                 ]);
             }
         }
@@ -318,8 +349,81 @@ class TournamentFormController extends AbstractController
             'form' => $playerForm->createView(),
             'tournament_form' => $tournamentForm,
             'tournament' => $tournament,
+            'reduction' => !empty($_ENV['ONLINE_REDUCTION']) ? $_ENV['ONLINE_REDUCTION'] : 0
         ]);
     }
+
+    private function getApplicationFee($boards)
+    {
+        $fee = !empty($_ENV['FEE']) ? $_ENV['FEE'] : 0;
+        return count($boards) * $fee;
+    }
+
+    /**
+     * @Route("/checkout", name="tournament_form_checkout", methods={"POST"})
+     */
+    public function checkout(
+        Request $request,
+        BoardRepository $boardRepository, 
+        PlayerRepository $playerRepository, 
+        TournamentRepository $tournamentRepository
+    ): RedirectResponse
+    {
+
+        $boardIds = explode(',', filter_input(INPUT_POST, 'to_pay_boards', FILTER_SANITIZE_STRING));
+        $boards = $boardRepository->findBy(['id'=>$boardIds]);
+
+        $player = $playerRepository->find(filter_input(INPUT_POST, 'player_id', FILTER_VALIDATE_INT));
+
+        $tournamentID = $boards[0]->getTournament()->getId();
+        $tournament = $tournamentRepository->find($tournamentID);
+        $admins = $tournament->getAdmins();
+
+        $stripeAccountID = $admins[0]->getStripeAccountId();
+        $apiKey = $_ENV['APP_ENV'] == 'dev' ? $_ENV['TEST_API_KEY'] : $_ENV['API_KEY'];
+        $onlineReduction = !empty($_ENV['ONLINE_REDUCTION']) ? $_ENV['ONLINE_REDUCTION'] : 0;
+        $items = [];
+        foreach($boards as $board){
+            $items[] = [
+                'name' => 'Inscription au tableau '.$board->getName(),
+                'amount' => ($board->getPrice() - $onlineReduction) * 100,
+                'currency' => 'eur',
+                'quantity' => 1,
+            ];
+        }
+
+        Stripe::setApiKey($apiKey);
+
+        $cancelUrl = $this->generateUrl(
+            'tournament_form_show', 
+            ['uri' => $tournament->getTournamentForm()->getUri()], 
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+        $successUrl = $this->generateUrl(
+            'payment_succeeded', 
+            [
+                'uri' => $tournament->getTournamentForm()->getUri(),
+                'tournament_id' => $tournament->getId(),
+                'player_id' => $player->getId()
+            ], 
+            UrlGeneratorInterface::ABSOLUTE_URL
+        );
+
+        $session = \Stripe\Checkout\Session::create([
+            'payment_method_types' => ['card'],
+            'line_items' => $items,
+            'payment_intent_data' => [
+              'application_fee_amount' => $this->getApplicationFee($boards),
+            ],
+            'mode' => 'payment',
+            'success_url' => $successUrl,
+            'cancel_url' => $cancelUrl,
+          ], ['stripe_account' => $stripeAccountID]);
+
+        return $this->redirect($session['url']);
+   
+    }
+
 
     /**
      * @Route("/validation/", name="tournament_form_validation_inscription", methods={"GET", "POST"})

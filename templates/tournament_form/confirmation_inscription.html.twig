@@ -7,6 +7,7 @@
     <div class="card-body">
         <h1 class="h4 card-subtitle text-center">Confirmation de votre inscription</h1>
         <p class="mt-5 text-center">L'inscription de {{player.firstname}} {{player.lastname}} au tournoi {{tournament.name}} est confirmée.</p>
+        <a class="mt-5 text-center d-block" href="{{ path('tournament_form_show', {'uri': uri}) }}">> Retourner au formulaire d'inscription</a>
     </div>
 </div>
 {% endblock %}

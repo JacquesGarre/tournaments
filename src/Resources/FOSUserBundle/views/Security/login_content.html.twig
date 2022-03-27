@@ -3,7 +3,8 @@
 <div>
     <div class="card">
         <form action="{{ path("fos_user_security_check") }}" method="post" class="m-auto">
-            <h1 class="h3 mt-5 mb-5 font-weight-normal text-center text-dark">Se connecter</h1>
+            <h1 class="h3 mt-5 mb-4 font-weight-normal text-center text-dark">Se connecter</h1>
+            <h3 class="h5 mt-2 mb-5 font-weight-normal text-center text-dark"><i>Cette page est reservée aux administrateurs</i></h3>
             {% if csrf_token %}
                 <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
             {% endif %}

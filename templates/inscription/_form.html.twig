@@ -40,7 +40,7 @@
     {% if tournament.onlinePaymentActivated %}
         <h3 class="h5 card-title mt-5">Je souhaite effectuer mon réglement</h3>
         <input type="radio" name="player[payment]" id="player_payment" value="internet" required checked>
-        <label style="color:green;font-weight: bold;">Dès maintenant sur internet (bénéficiez de 1€ de réduction par tableau!)</label><br>
+        <label style="color:green;font-weight: bold;">Dès maintenant sur internet {{ reduction > 0 ? '(bénéficiez de ' ~ reduction ~ '€ de réduction par tableau!)' : '' }}</label><br>
         <input type="radio" name="player[payment]" id="player_payment" value="arrival" required>
         <label>En arrivant sur place</label>
     {% else %}

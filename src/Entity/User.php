@@ -35,6 +35,11 @@ class User extends BaseUser
      */
     private $lastname;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $StripeAccountId;
+
     public function __construct()
     {
         parent::__construct();
@@ -127,6 +132,18 @@ class User extends BaseUser
     public function setLastname(string $lastname): self
     {
         $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getStripeAccountId(): ?string
+    {
+        return $this->StripeAccountId;
+    }
+
+    public function setStripeAccountId(?string $StripeAccountId): self
+    {
+        $this->StripeAccountId = $StripeAccountId;
 
         return $this;
     }

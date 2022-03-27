@@ -2,14 +2,21 @@
 
 {{ form_row(form._token) }}
 
+{{ form_label(form.name, 'Nom du tournoi') }}
 {{ form_widget(form.name, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Nom du tournoi' } }) }}
 {{ form_errors(form.name) }}
 
+{{ form_label(form.description, 'Description (adresse, dates...) & règles') }}
 {{ form_widget(form.description, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Description (adresse, dates...) & règles', 'rows': '15' } }) }}
 {{ form_errors(form.description) }}
 
-{{ form_widget(form.admin_email, { 'attr': {'class': 'form-control mb-5', 'placeholder': 'Adresse email de contact (utilisée pour le formulaire de contact)'} }) }}
+{{ form_label(form.admin_email, 'Adresse email de contact (utilisée pour le formulaire d\'inscription)') }}
+{{ form_widget(form.admin_email, { 'attr': {'class': 'form-control mb-3', 'placeholder': 'Adresse email de contact (utilisée pour le formulaire de contact)'} }) }}
 {{ form_errors(form.admin_email) }}
+
+{{ form_label(form.online_payment_activated, 'Accepter les paiements en ligne pour ce tournoi') }}
+{{ form_widget(form.online_payment_activated, { 'attr': {'class': 'form-control mb-5', 'placeholder': 'Accepter les paiements en ligne pour ce tournoi'} }) }}
+{{ form_errors(form.online_payment_activated) }}
 
 <button class="btn btn-primary float-left"><i class="fas fa-save mr-2"></i>Enregistrer</button>
 
