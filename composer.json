@@ -23,7 +23,7 @@
         "symfony/expression-language": "4.2.*",
         "symfony/flex": "^1.1",
         "symfony/form": "4.2.*",
-        "symfony/framework-bundle": "4.2.3",
+        "symfony/framework-bundle": "4.2.7",
         "symfony/intl": "4.2.*",
         "symfony/maker-bundle": "^1.0",
         "symfony/monolog-bundle": "^3.1",
